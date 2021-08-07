@@ -1,11 +1,11 @@
 class Band {
-  String? id;
-  String? name;
+  String id;
+  String name;
   int? votes;
 
   Band({
-    this.id,
-    this.name,
+    required this.id,
+    required this.name,
     this.votes
   });
 
