@@ -60,6 +60,7 @@ class _HomePageState extends State<HomePage> {
       ),
       direction: DismissDirection.startToEnd,
       key: Key( band.id ),
+      onDismissed: ( DismissDirection direction ) {},
     );
   }
 
