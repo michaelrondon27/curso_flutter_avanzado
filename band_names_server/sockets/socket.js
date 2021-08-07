@@ -39,6 +39,12 @@ io.on('connection', client => {
         io.emit('active-bands', bands.getBands() );
     });
 
+    client.on('delete-band', ( payload ) => {
+        bands.deleteBand( payload.id );
+
+        io.emit('active-bands', bands.getBands() );
+    });
+
     // client.on('emitir-mensaje', ( payload ) => {
     //     client.broadcast.emit('nuevo-mensaje', payload);
     // });
