@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pie_chart/pie_chart.dart';
 import 'package:provider/provider.dart';
 
 import 'package:band_names/models/band.dart';
@@ -19,7 +20,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     final socketService = Provider.of<SocketService>(context,listen: false);
 
-    socketService.socket.on('active-bands', ( payload ) => _handleActiveBands);
+    socketService.socket.on('active-bands', _handleActiveBands);
     
     super.initState();
   }
@@ -59,9 +60,17 @@ class _HomePageState extends State<HomePage> {
         elevation: 1,
         title: Text('Band Names', style: TextStyle( color: Colors.black87 ) )
       ),
-      body: ListView.builder(
-        itemBuilder: ( context, i ) => _bandTile( bands[i] ),
-        itemCount: bands.length,
+      body: Column(
+        children: [
+          _showGraph(),
+
+          Expanded(
+            child: ListView.builder(
+              itemBuilder: ( context, i ) => _bandTile( bands[i] ),
+              itemCount: bands.length,
+            ),
+          )
+        ]
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon( Icons.add ),
@@ -154,5 +163,68 @@ class _HomePageState extends State<HomePage> {
     }
 
     Navigator.pop(context);
+  }
+
+  Widget _showGraph() {
+    Map<String, double> dataMap = new Map();
+
+    this.bands.forEach((band) {
+      dataMap.putIfAbsent(band.name, () => band.votes!.toDouble() );
+    });
+
+    final List<Color> colorList = [
+      Colors.blue[50]!,
+      Colors.blue[200]!,
+      Colors.pink[50]!,
+      Colors.pink[200]!,
+      Colors.yellow[50]!,
+      Colors.yellow[200]!
+    ];
+
+    if ( bands.isEmpty )
+      return Padding(
+        padding: EdgeInsets.all(10),
+        child: Text(
+          'No hay bandas',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+        ),
+      );
+
+    return Container(
+      child: PieChart(
+        animationDuration: Duration( milliseconds: 800 ),
+        centerText: 'HYBRID',
+        chartLegendSpacing: 32.0,
+        chartRadius: MediaQuery.of(context).size.width / 3.2,
+        chartType: ChartType.ring,
+        chartValuesOptions: ChartValuesOptions(
+          chartValueBackgroundColor: Colors.grey[200],
+          chartValueStyle: defaultChartValueStyle.copyWith(
+            color: Colors.blueGrey[900]!.withOpacity(0.9)
+          ),
+          decimalPlaces: 1,
+          showChartValues: true,
+          showChartValueBackground: true,
+          showChartValuesInPercentage: true,
+          showChartValuesOutside: true
+        ),
+        colorList: colorList,
+        dataMap: dataMap,
+        initialAngleInDegree: 0,
+        legendOptions: LegendOptions(
+          legendPosition: LegendPosition.right,
+          legendShape: BoxShape.circle,
+          legendTextStyle: TextStyle(
+            fontWeight: FontWeight.bold
+          ),
+          showLegends: true,
+          showLegendsInRow: false
+        ),
+        ringStrokeWidth: 12,
+      ),
+      height: 200,
+      padding: EdgeInsets.only( top: 10 ),
+      width: double.infinity,
+    );
   }
 }
