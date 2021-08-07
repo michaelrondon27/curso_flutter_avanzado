@@ -33,5 +33,9 @@ class SocketService with ChangeNotifier {
 
       notifyListeners();
     });
+
+    socket.on('nuevo-mensaje', ( payload ) {
+      print('nuevo-mensaje: $payload');
+    });
   }
 }

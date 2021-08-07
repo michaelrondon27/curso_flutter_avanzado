@@ -13,4 +13,8 @@ io.on('connection', client => {
 
         io.emit( 'mensaje', { admin: 'Nuevo mensaje' });
     });
+
+    client.on('emitir-mensaje', ( payload ) => {
+        client.broadcast.emit('nuevo-mensaje', payload);
+    });
 });
