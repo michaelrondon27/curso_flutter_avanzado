@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: 'status',
+        initialRoute: 'home',
         routes: {
           'home': (_) => HomePage(),
           'status': (_) => StatusPage(),
