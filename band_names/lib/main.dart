@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
  
-import 'package:band_names/src/pages/home.dart';
+import 'package:band_names/pages/home.dart';
 
 void main() => runApp(MyApp());
  
