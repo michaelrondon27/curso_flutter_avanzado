@@ -12,6 +12,8 @@ class _ChatPageState extends State<ChatPage> {
   final _focusNode = new FocusNode();
   final _textControler = new TextEditingController();
 
+  bool _estaEscribiendo = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +79,15 @@ class _ChatPageState extends State<ChatPage> {
                   hintText: 'Enviar mensaje'
                 ),
                 focusNode: _focusNode,
-                onChanged: ( String value ) {},
+                onChanged: ( String value ) {
+                  setState(() {
+                    if ( value.trim().length > 0 ) {
+                      _estaEscribiendo = true;
+                    } else {
+                      _estaEscribiendo = false;
+                    }
+                  });
+                },
                 onSubmitted: _handleSubmit,
               ),
             ),
@@ -86,12 +96,17 @@ class _ChatPageState extends State<ChatPage> {
               child: Platform.isIOS
                 ? CupertinoButton(
                     child: Text('Enviar'), 
-                    onPressed: () {}
+                    onPressed: _estaEscribiendo ? () => _handleSubmit( _textControler.text.trim() ) : null
                   )
                 : Container(
-                    child: IconButton(
-                      icon: Icon( Icons.send, color: Colors.blue[400] ),
-                      onPressed: () {},
+                    child: IconTheme(
+                      child: IconButton(
+                        highlightColor: Colors.transparent,
+                        icon: Icon( Icons.send ),
+                        onPressed: _estaEscribiendo ? () => _handleSubmit( _textControler.text.trim() ) : null,
+                        splashColor: Colors.transparent,
+                      ),
+                      data: IconThemeData( color: Colors.blue[400] ),
                     ),
                     margin: EdgeInsets.symmetric( horizontal: 4 )
                   ),
@@ -106,7 +121,11 @@ class _ChatPageState extends State<ChatPage> {
 
   _handleSubmit( String value ) {
     _textControler.clear();
-    
+
     _focusNode.requestFocus();
+
+    setState(() {
+      _estaEscribiendo = false;
+    });
   }
 }
