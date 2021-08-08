@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: 'usuarios',
+      initialRoute: 'chat',
       routes: appRoutes,
       title: 'Chat App'
     );
