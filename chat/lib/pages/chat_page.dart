@@ -19,6 +19,15 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   List<ChatMessage> _messages = [];
 
   @override
+  void dispose() {
+    for ( ChatMessage message in _messages ) {
+      message.animationController.dispose();
+    }
+    
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -126,7 +135,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   _handleSubmit( String value ) {
     if ( value.trim().length == 0 ) return;
-    
+
     _textControler.clear();
 
     _focusNode.requestFocus();
