@@ -1,19 +1,35 @@
 import 'package:flutter/material.dart';
 
 class CustomInput extends StatelessWidget {
+  final IconData icon;
+  final bool isPassword;
+  final TextInputType keyboardType;
+  final String placeholder;
+  final TextEditingController textController;
+
+  CustomInput({
+    Key? key, 
+    required this.icon, 
+    this.isPassword: false, 
+    this.keyboardType: TextInputType.text, 
+    required this.placeholder, 
+    required this.textController
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
       child: TextField(
         autocorrect: false,
+        controller: this.textController,
         decoration: InputDecoration(
           border: InputBorder.none,
           focusedBorder: InputBorder.none,
-          hintText: 'Email',
-          prefixIcon: Icon( Icons.mail_outline )
+          hintText: this.placeholder,
+          prefixIcon: Icon( this.icon )
         ),
-        keyboardType: TextInputType.emailAddress,
-        // obscureText: true,
+        keyboardType: this.keyboardType,
+        obscureText: this.isPassword,
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular( 30 ),
