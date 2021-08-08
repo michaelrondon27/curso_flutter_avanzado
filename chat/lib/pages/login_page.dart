@@ -15,11 +15,17 @@ class LoginPage extends StatelessWidget {
           child: Container(
             child: Column(
               children: [
-                Logo(),
+                Logo(
+                  title: 'Messenger',
+                ),
         
                 _Form(),
         
-                Labels(),
+                Labels(
+                  route: 'register',
+                  subtitle: 'Crea una ahora!',
+                  title: '¿No tienes cuenta?',
+                ),
         
                 Text(
                   'Términos y condiciones de uso',
