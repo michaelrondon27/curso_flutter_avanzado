@@ -19,13 +19,12 @@ const crearUsuario = async (req, res = response) => {
 
         const usuario = new Usuario( req.body );
 
-        // Encriptar contraseña
         const salt = bcrypt.genSaltSync();
+
         usuario.password = bcrypt.hashSync( password, salt );
 
         await usuario.save();
 
-        // Generar JWT
         const token = await generarJWT( usuario.id );
 
         res.json({
@@ -43,6 +42,46 @@ const crearUsuario = async (req, res = response) => {
     }
 }
 
+const login = async (req, res = response) => {
+    const { email, password } = req.body;
+
+    try {
+        const usuarioDB = await Usuario.findOne({ email });
+
+        if ( !usuarioDB ) {
+            return res.status(400).json({
+                msg: 'Email no encontrado',
+                ok: false
+            });
+        }
+
+        const validPassword = bcrypt.compareSync( password, usuarioDB.password );
+
+        if ( !validPassword ) {
+            return res.status(400).json({
+                msg: 'La contrasela no es válida',
+                ok: false
+            });
+        }
+
+        const token = await generarJWT( usuarioDB.id );
+
+        return res.json({
+            ok: false,
+            token,
+            usuario: usuarioDB
+        });
+    } catch( error ) {
+        console.log(error);
+
+        return res.status(500).json({
+            msg: 'Hable con el adminsitrador',
+            ok: false
+        });
+    }
+}
+
 module.exports = {
-    crearUsuario
+    crearUsuario,
+    login
 }
