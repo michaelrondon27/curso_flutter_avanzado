@@ -3,14 +3,34 @@ const { response } = require("express");
 const Usuario = require('../models/usuario');
 
 const crearUsuario = async (req, res = response) => {
-    const usuario = new Usuario( req.body );
+    const { email } = req.body;
 
-    await usuario.save();
+    try {
+        const existeEmail = await Usuario.findOne({ email });
 
-    res.json({
-        msg: 'Crear Usuario',
-        ok: true
-    });
+        if ( existeEmail ) {
+            return res.status(400).json({
+                msg: 'El correo ya está registrado',
+                ok: false
+            });
+        }
+
+        const usuario = new Usuario( req.body );
+
+        await usuario.save();
+
+        res.json({
+            ok: true,
+            usuario
+        });
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            msg: 'Hable con el administrador',
+            ok: false
+        })
+    }
 }
 
 module.exports = {
