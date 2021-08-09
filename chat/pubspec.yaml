@@ -32,6 +32,7 @@ dependencies:
   http: ^0.13.3
   provider: ^5.0.0
   pull_to_refresh: ^2.0.0
+  socket_io_client: ^1.0.1
 
 dev_dependencies:
   flutter_test:
