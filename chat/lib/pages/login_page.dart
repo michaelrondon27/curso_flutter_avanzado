@@ -88,7 +88,7 @@ class __FormState extends State<_Form> {
               );
 
               if ( loginOk ) {
-
+                Navigator.pushReplacementNamed(context, 'usuarios');
               } else {
                 mostrarAlerta(
                   context,
