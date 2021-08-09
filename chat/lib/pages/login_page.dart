@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:chat/helpers/mostrar_alerta.dart';
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/widgets/boton_azul.dart';
 import 'package:chat/widgets/custom_input.dart';
@@ -78,13 +79,23 @@ class __FormState extends State<_Form> {
           ),
 
           BotonAzul(
-            onPressed: authService.autenticando ? null : () {
+            onPressed: authService.autenticando ? null : () async {
               FocusScope.of(context).unfocus();
 
-              authService.login(
+              final loginOk = await authService.login(
                 emailCtrl.text.trim(), 
                 passwordCtrl.text.trim()
               );
+
+              if ( loginOk ) {
+
+              } else {
+                mostrarAlerta(
+                  context,
+                  'Revise sus credenciales nuevamente',
+                  'Login incorrecto'
+                );
+              }
             },
             text: 'Ingrese',
           )
