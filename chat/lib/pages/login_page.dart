@@ -58,6 +58,8 @@ class __FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
     return Container(
       child: Column(
         children: [
@@ -76,12 +78,12 @@ class __FormState extends State<_Form> {
           ),
 
           BotonAzul(
-            onPressed: () {
-              final authService = Provider.of<AuthService>(context, listen: false);
+            onPressed: authService.autenticando ? null : () {
+              FocusScope.of(context).unfocus();
 
               authService.login(
-                emailCtrl.text, 
-                passwordCtrl.text
+                emailCtrl.text.trim(), 
+                passwordCtrl.text.trim()
               );
             },
             text: 'Ingrese',

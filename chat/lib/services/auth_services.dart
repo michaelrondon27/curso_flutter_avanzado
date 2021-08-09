@@ -9,8 +9,18 @@ import 'package:chat/models/login_response.dart';
 
 class AuthService with ChangeNotifier {
   late Usuario usuario;
+  
+  bool _autenticando = false;
+  bool get autenticando => this._autenticando;
+  set autenticando( bool value ) {
+    this._autenticando = value;
+
+    notifyListeners();
+  }
 
   Future login( String email, String password ) async {
+    this.autenticando = true;
+    
     final data = {
       'email': email,
       'password': password
@@ -29,5 +39,7 @@ class AuthService with ChangeNotifier {
 
       this.usuario = loginResponse.usuario;
     }
+
+    this.autenticando = false;
   }
 }
