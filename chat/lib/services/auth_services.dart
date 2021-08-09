@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:chat/global/environment.dart';
+
 import 'package:chat/models/login_response.dart';
 import 'package:chat/models/usuario.dart';
 
@@ -62,6 +63,40 @@ class AuthService with ChangeNotifier {
       return true;
     } else {
       return false;
+    }
+  }
+
+  Future register( String email, String nombre, String password ) async {
+    this.autenticando = true;
+    
+    final data = {
+      'email': email,
+      'nombre': nombre,
+      'password': password
+    };
+
+    final resp = await http.post(
+      Uri.parse('${ Environment.apiUrl }/login/new'),
+      body: jsonEncode( data ),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    );
+
+    this.autenticando = false;
+
+    if ( resp.statusCode == 200 ) {
+      final loginResponse = loginResponseFromJson( resp.body );
+
+      this.usuario = loginResponse.usuario;
+
+      this._gaurdarToken( loginResponse.token );
+      
+      return true;
+    } else {
+      final respBody = jsonDecode( resp.body );
+
+      return respBody['msg'];
     }
   }
 
