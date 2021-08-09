@@ -4,6 +4,8 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'package:chat/global/environment.dart';
 
+import 'package:chat/services/auth_services.dart';
+
 enum ServerStatus {
   Online,
   Offline,
@@ -19,9 +21,14 @@ class SocketService with ChangeNotifier {
   
   Function get emit => this._socket.emit;
 
-  void connect() {
+  void connect() async {
+    final token = await AuthService.getToken();
+
     this._socket = IO.io( Environment.socketUrl, {
       'autoConnect': true,
+      'extraHeaders': {
+        'x-token': token
+      },
       'forceNew': true,
       'transports': ['websocket']
     });

@@ -1,5 +1,15 @@
 const jwt = require('jsonwebtoken');
 
+const comprobarJWT = ( token = '' ) => {
+    try {
+        const { uid } = jwt.verify( token, process.env.JWT_KEY );
+
+        return [true, uid];
+    } catch(error) {
+        return [false, null]
+    }
+}
+
 const generarJWT = ( uid ) => {
     return new Promise( (resolve, reject) => {
         const payload = { uid };
@@ -17,5 +27,6 @@ const generarJWT = ( uid ) => {
 }
 
 module.exports = {
+    comprobarJWT,
     generarJWT
 }
