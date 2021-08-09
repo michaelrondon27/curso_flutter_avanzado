@@ -33,8 +33,9 @@ class _UsuariosPageState extends State<UsuariosPage> {
       appBar: AppBar(
         actions: [
           Container(
-            child: Icon( Icons.check_circle, color: Colors.blue[400] ),
-            // child: Icon( Icons.offline_bolt, color: Colors.red ),
+            child: (socketService.serverStatus == ServerStatus.Online ) 
+              ? Icon( Icons.check_circle, color: Colors.blue[400] )
+              : Icon( Icons.offline_bolt, color: Colors.red ),
             margin: EdgeInsets.only( right: 10 ),
           )
         ],
