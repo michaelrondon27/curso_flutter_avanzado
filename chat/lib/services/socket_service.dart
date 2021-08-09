@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+import 'package:chat/global/environment.dart';
+
 enum ServerStatus {
   Online,
   Offline,
@@ -17,14 +19,11 @@ class SocketService with ChangeNotifier {
   
   Function get emit => this._socket.emit;
 
-  SocketService(){
-    this._initConfig();
-  }
-
-  void _initConfig() {
-    this._socket = IO.io('http://localhost:3000/', {
-      'transports': ['websocket'],
-      'autoConnect': true
+  void connect() {
+    this._socket = IO.io( Environment.socketUrl, {
+      'autoConnect': true,
+      'forceNew': true,
+      'transports': ['websocket']
     });
 
     this._socket.on('connect', (_) {
@@ -36,5 +35,9 @@ class SocketService with ChangeNotifier {
       this._serverStatus = ServerStatus.Offline;
       notifyListeners();
     });
+  }
+
+  void disconnect() {
+    this._socket.disconnect();
   }
 }

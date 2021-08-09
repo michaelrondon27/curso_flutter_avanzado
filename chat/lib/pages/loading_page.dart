@@ -5,6 +5,7 @@ import 'package:chat/pages/login_page.dart';
 import 'package:chat/pages/usuarios_page.dart';
 
 import 'package:chat/services/auth_services.dart';
+import 'package:chat/services/socket_service.dart';
 
 class LoadingPage extends StatelessWidget {
   @override
@@ -23,10 +24,13 @@ class LoadingPage extends StatelessWidget {
 
   Future checkLogginState( BuildContext context ) async {
     final authService = Provider.of<AuthService>(context, listen: false);
+    final socketService = Provider.of<SocketService>(context, listen: false);
 
     final autenticado = await authService.isLoggedIn();
 
     if ( autenticado ) {
+      socketService.connect();
+      
       Navigator.pushReplacement(context, PageRouteBuilder(
         pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) => UsuariosPage(),
         transitionDuration: Duration( milliseconds: 700 ),

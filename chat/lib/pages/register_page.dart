@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:chat/helpers/mostrar_alerta.dart';
 
 import 'package:chat/services/auth_services.dart';
+import 'package:chat/services/socket_service.dart';
 
 import 'package:chat/widgets/boton_azul.dart';
 import 'package:chat/widgets/custom_input.dart';
@@ -63,6 +64,7 @@ class __FormState extends State<_Form> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
     
     return Container(
       child: Column(
@@ -96,6 +98,8 @@ class __FormState extends State<_Form> {
               );
 
               if ( registerOk == true ) {
+                socketService.connect();
+                
                 Navigator.pushReplacementNamed(context, 'usuarios');
               } else {
                 mostrarAlerta(
