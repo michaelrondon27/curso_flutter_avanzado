@@ -63,7 +63,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
     );
   }
 
-  ListTile _usuarioTile( Usuario usuario) {
+  ListTile _usuarioTile( Usuario usuario ) {
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: Colors.blue[100],
@@ -74,7 +74,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
       trailing: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
-          color: usuario.online ? Colors.green[300] : Colors.red
+          color: usuario.online! ? Colors.green[300] : Colors.red
         ),
         height: 10,
         width: 10
