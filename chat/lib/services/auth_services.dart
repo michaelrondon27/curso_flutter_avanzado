@@ -58,7 +58,7 @@ class AuthService with ChangeNotifier {
 
       this.usuario = loginResponse.usuario;
 
-      this._gaurdarToken( loginResponse.token );
+      this._guardarToken( loginResponse.token );
       
       return true;
     } else {
@@ -90,7 +90,7 @@ class AuthService with ChangeNotifier {
 
       this.usuario = loginResponse.usuario;
 
-      this._gaurdarToken( loginResponse.token );
+      this._guardarToken( loginResponse.token );
       
       return true;
     } else {
@@ -100,8 +100,36 @@ class AuthService with ChangeNotifier {
     }
   }
 
-  Future _gaurdarToken( String token ) async {
-    await _storage.write(key: 'token', value: token);
+  Future<bool> isLoggedIn() async {
+    final token = await this._storage.read(key: 'token');
+
+    final resp = await http.get(
+      Uri.parse('${ Environment.apiUrl }/login/renew'),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-token': token ?? ''
+      }
+    );
+
+    if ( resp.statusCode == 200 ) {
+      final loginResponse = loginResponseFromJson( resp.body );
+
+      this.usuario = loginResponse.usuario;
+
+      this._guardarToken( loginResponse.token );
+      
+      return true;
+    } else {
+      this.logout();
+
+      return false;
+    }
+  }
+
+  Future _guardarToken( String token ) async {
+    final options = IOSOptions(accessibility: IOSAccessibility.first_unlock);
+
+    await this._storage.write(key: 'token', value: token, iOptions: options);
 
     return;
   }

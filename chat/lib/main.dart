@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: 'login',
+        initialRoute: 'loading',
         routes: appRoutes,
         title: 'Chat App'
       ),
