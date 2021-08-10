@@ -6,6 +6,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:chat/models/usuario.dart';
 
 import 'package:chat/services/auth_services.dart';
+import 'package:chat/services/chat_service.dart';
 import 'package:chat/services/socket_service.dart';
 import 'package:chat/services/usuarios_service.dart';
 
@@ -90,6 +91,13 @@ class _UsuariosPageState extends State<UsuariosPage> {
         backgroundColor: Colors.blue[100],
         child: Text(usuario.nombre.substring(0, 2))
       ),
+      onTap: () {
+        final chatService = Provider.of<ChatService>(context, listen: false);
+
+        chatService.usuarioPara = usuario;
+
+        Navigator.pushNamed(context, 'chat');
+      },
       subtitle: Text( usuario.email ),
       title: Text(usuario.nombre),
       trailing: Container(

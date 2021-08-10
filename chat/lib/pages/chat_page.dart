@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
+import 'package:chat/services/chat_service.dart';
+
 import 'package:chat/widgets/chat_message.dart';
 
 class ChatPage extends StatefulWidget {
@@ -29,6 +33,10 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final chatService = Provider.of<ChatService>(context);
+
+    final usuarioPara = chatService.usuarioPara;
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -39,7 +47,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
             CircleAvatar(
               backgroundColor: Colors.blue[100],
               child: Text(
-                'Te',
+                usuarioPara.nombre.substring(0, 2),
                 style: TextStyle( fontSize: 12 ),
               ),
               maxRadius: 14,
@@ -48,7 +56,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
             SizedBox( height: 3 ),
 
             Text(
-              'Melissa flores',
+              usuarioPara.nombre,
               style: TextStyle(
                 color: Colors.black87,
                 fontSize: 12
