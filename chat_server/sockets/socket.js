@@ -10,6 +10,12 @@ io.on('connection', client => {
 
     usuarioConectado( uid );
 
+    client.join( uid );
+
+    client.on('mensaje-personal', ( payload ) => {
+        console.log(payload);
+    });
+
     client.on('disconnect', () => {
         usuarioDesconectado( uid );
     });
