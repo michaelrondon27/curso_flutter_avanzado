@@ -7,6 +7,7 @@ import 'package:chat/models/usuario.dart';
 
 import 'package:chat/services/auth_services.dart';
 import 'package:chat/services/socket_service.dart';
+import 'package:chat/services/usuarios_service.dart';
 
 class UsuariosPage extends StatefulWidget {
   @override
@@ -14,13 +15,17 @@ class UsuariosPage extends StatefulWidget {
 }
 
 class _UsuariosPageState extends State<UsuariosPage> {
+  final usuariosService = new UsuariosService();
   RefreshController _refreshController = RefreshController(initialRefresh: false);
 
-  final usuarios = [
-    Usuario(email: 'test1@test.com', nombre: 'Maria', online: true, uid: '1'),
-    Usuario(email: 'test2@test.com', nombre: 'Melissa', uid: '2'),
-    Usuario(email: 'test3@test.com', nombre: 'Michael', online: true, uid: '3'),
-  ];
+  List<Usuario> usuarios = [];
+
+  @override
+  void initState() { 
+    this._cargarUsuarios();
+    
+    super.initState();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -99,7 +104,9 @@ class _UsuariosPageState extends State<UsuariosPage> {
   }
 
   _cargarUsuarios() async {
-    await Future.delayed(Duration( milliseconds: 1000 ));
+    this.usuarios = await usuariosService.getUsuarios();
+
+    setState(() {});
 
     _refreshController.refreshCompleted();
   }
