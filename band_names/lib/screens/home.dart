@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// Models
@@ -33,10 +36,74 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         elevation: 1,
-        onPressed: () {},
+        onPressed: addNewBand,
         child: const Icon(Icons.add)
       ),
     );
+  }
+
+  void addBandToList(String name) {
+    if (name.length > 1) {
+      bands.add(Band(
+        id: DateTime.now().toString(),
+        name: name,
+        votes: 0
+      ));
+    }
+
+    Navigator.pop(context);
+  }
+
+  addNewBand() {
+    final textController = TextEditingController();
+
+    if (Platform.isAndroid) {
+      return showDialog(
+        builder: (_) {
+          return AlertDialog(
+            actions: <Widget> [
+              MaterialButton(
+                elevation: 5,
+                onPressed: () => addBandToList(textController.text),
+                textColor: Colors.blue,
+                child: const Text('Add'),
+              )
+            ],
+            content: TextField(
+              controller: textController,
+            ),
+            title: const Text('New band name'),
+          );
+        },
+        context: context
+      );
+    }
+
+    showCupertinoDialog(
+      builder: (_) {
+        return CupertinoAlertDialog(
+          actions: <Widget> [
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              onPressed: () => addBandToList(textController.text),
+              child: const Text('Add')
+            ),
+
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Dismiss')
+            )
+          ],
+          content: CupertinoTextField(
+            controller: textController,
+          ),
+          title: const Text('New band name'),
+        );
+      },
+      context: context
+    );
+
   }
 
   ListTile _bandTile(Band band) {
