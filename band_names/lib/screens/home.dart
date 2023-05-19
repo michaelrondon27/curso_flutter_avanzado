@@ -49,6 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
         name: name,
         votes: 0
       ));
+
+      setState(() {});
     }
 
     Navigator.pop(context);
@@ -106,17 +108,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   }
 
-  ListTile _bandTile(Band band) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Colors.blue[100],
-        child: Text(band.name.substring(0, 2)),
+  Widget _bandTile(Band band) {
+    return Dismissible(
+      background: Container(
+        color: Colors.red,
+        padding: const EdgeInsets.only(left: 8.0),
+        child: const Align(
+          alignment: Alignment.centerLeft,
+          child: Text('Delete Band', style: TextStyle(color: Colors.white))
+        ),
       ),
-      onTap: () {
-        print(band.name);
-      },
-      title: Text(band.name),
-      trailing: Text('${band.votes}', style: const TextStyle(fontSize: 20)),
+      direction: DismissDirection.startToEnd,
+      key: Key(band.id),
+      onDismissed: (DismissDirection direction) {},
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Colors.blue[100],
+          child: Text(band.name.substring(0, 2)),
+        ),
+        onTap: () {
+          print(band.name);
+        },
+        title: Text(band.name),
+        trailing: Text('${band.votes}', style: const TextStyle(fontSize: 20)),
+      ),
     );
   }
 }
